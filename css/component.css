@@ -26,10 +26,11 @@
 
 /* Wrapper and figures */
 
+/* The size of this wrapper can be smaller if the items should not be scattered across the whole container */ 
 .photostack > div {
 	width: 100%;
-	margin: 0 auto;
 	height: 100%;
+	margin: 0 auto;
 }
 
 .photostack figure {
@@ -211,7 +212,8 @@
 }
 
 .js .photostack-start::before,
-.js .photostack-start:hover::after  {
+.js .photostack-start:hover::after,
+.touch .photostack-start::after  {
 	opacity: 1;
 	visibility: visible;
 }
