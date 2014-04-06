@@ -109,7 +109,9 @@
 
 	Photostack.prototype._init = function() {
 		this.currentItem = this.items[ this.current ];
-		this._addNavigation();
+		if(this.options.showNavigation) {
+			this._addNavigation();
+		}
 		this._getSizes();
 		this._initEvents();
 	}
@@ -156,24 +158,26 @@
 			open();
 		}
 
-		this.navDots.forEach( function( dot, idx ) {
-			dot.addEventListener( 'click', function() {
-				// rotate the photo if clicking on the current dot
-				if( idx === self.current ) {
-					self._rotateItem();
-				}
-				else {
-					// if the photo is flipped then rotate it back before shuffling again
-					var callback = function() { self._showPhoto( idx ); }
-					if( self.flipped ) {
-						self._rotateItem( callback );
+		if(this.options.showNavigation) {
+			this.navDots.forEach( function( dot, idx ) {
+				dot.addEventListener( 'click', function() {
+					// rotate the photo if clicking on the current dot
+					if( idx === self.current ) {
+						self._rotateItem();
 					}
 					else {
-						callback();
+						// if the photo is flipped then rotate it back before shuffling again
+						var callback = function() { self._showPhoto( idx ); }
+						if( self.flipped ) {
+							self._rotateItem( callback );
+						}
+						else {
+							callback();
+						}
 					}
-				}
+				} );
 			} );
-		} );
+		}
 
 		window.addEventListener( 'resize', function() { self._resizeHandler(); } );
 	}
@@ -210,25 +214,35 @@
 		// if there is something behind..
 		if( classie.hasClass( this.currentItem, 'photostack-flip' ) ) {
 			this._removeItemPerspective();
-			classie.removeClass( this.navDots[ this.current ], 'flippable' );
+			if(this.options.showNavigation) {
+				classie.removeClass( this.navDots[ this.current ], 'flippable' );
+			}
 		}
 
-		classie.removeClass( this.navDots[ this.current ], 'current' );
+		if(this.options.showNavigation) {
+			classie.removeClass( this.navDots[ this.current ], 'current' );
+		}
 		classie.removeClass( this.currentItem, 'photostack-current' );
 		
 		// change current
 		this.current = pos;
 		this.currentItem = this.items[ this.current ];
 		
-		classie.addClass( this.navDots[ this.current ], 'current' );
+		if(this.options.showNavigation) {
+			classie.addClass( this.navDots[ this.current ], 'current' );
+		}
 		// if there is something behind..
-		if( this.currentItem.querySelector( '.photostack-back' ) ) {
+		if( this.options.showNavigation && this.currentItem.querySelector( '.photostack-back' ) ) {
 			// nav dot gets class flippable
 			classie.addClass( this.navDots[ pos ], 'flippable' );
 		}
 
 		// shuffle a bit
 		this._shuffle();
+
+		if(this.options.afterShowPhoto) {
+			this.options.afterShowPhoto(this);
+		}
 	}
 
 	// display items (randomly)
@@ -417,7 +431,9 @@
 				};
 
 			if( this.flipped ) {
-				classie.removeClass( this.navDots[ this.current ], 'flip' );
+				if(this.options.showNavigation) {
+					classie.removeClass( this.navDots[ this.current ], 'flip' );
+				}
 				if( support.preserve3d ) {
 					this.currentItem.style.WebkitTransform = 'translate(' + this.centerItem.x + 'px,' + this.centerItem.y + 'px) rotateY(0deg)';
 					this.currentItem.style.transform = 'translate(' + this.centerItem.x + 'px,' + this.centerItem.y + 'px) rotateY(0deg)';
@@ -427,7 +443,9 @@
 				}
 			}
 			else {
-				classie.addClass( this.navDots[ this.current ], 'flip' );
+				if(this.options.showNavigation) {
+					classie.addClass( this.navDots[ this.current ], 'flip' );
+				}
 				if( support.preserve3d ) {
 					this.currentItem.style.WebkitTransform = 'translate(' + this.centerItem.x + 'px,' + this.centerItem.y + 'px) translate(' + this.sizes.item.width + 'px) rotateY(-179.9deg)';
 					this.currentItem.style.transform = 'translate(' + this.centerItem.x + 'px,' + this.centerItem.y + 'px) translate(' + this.sizes.item.width + 'px) rotateY(-179.9deg)';
