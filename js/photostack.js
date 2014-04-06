@@ -99,7 +99,20 @@
 			this.current = options.start;
 		}
   	this._init();
+		var ps = this;
 
+  	// Public methods.
+  	return {
+  		showPhoto: function(idx) {
+  			ps._showPhoto.call(ps, idx);
+  		},
+  		open: function() {
+  			ps._open.call(ps, true);
+  		},
+  		navigate: function(dir) {
+  			ps._navigate.call(ps, dir);
+  		},
+  	}
 	}
 
 	Photostack.prototype.options = {
@@ -366,6 +379,22 @@
 			};
 
 		moveItems.call();
+	}
+
+	Photostack.prototype._navigate = function(dir) {
+		var current = this.current,
+		itemsCount = this.itemsCount,
+		lastItem = itemsCount - 1,
+		idx = 0;
+		if(dir == 'next') {
+			idx = current < lastItem ? current + 1 : 0
+		} else if(dir == 'prev') {
+			idx = current > 0 ? current - 1 : lastItem;
+		}
+		this._showPhoto(idx);
+		if(this.options.afterNavigate) {
+			this.options.afterNavigate(this);
+		}
 	}
 
 	Photostack.prototype._getSizes = function() {
