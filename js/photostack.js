@@ -141,34 +141,39 @@
 		this.navDots = [].slice.call( this.nav.children );
 	}
 
+	Photostack.prototype._open = function( beforeStep ) {
+		var self = this,
+		el = this.el;
+		var setTransition = function() { 
+			if( support.transitions ) {
+				classie.addClass( el, 'photostack-transition' ); 
+			}
+		}
+		if( beforeStep ) {
+			el.removeEventListener( 'click', open ); 
+			classie.removeClass( el, 'photostack-start' );
+			setTransition();
+		}
+		else {
+			self.openDefault = true;
+			setTimeout( setTransition, 25 );
+		}
+		self.started = true; 
+		self._showPhoto( self.current );
+	};
+
 	Photostack.prototype._initEvents = function() {
 		var self = this,
-			beforeStep = classie.hasClass( this.el, 'photostack-start' ),
-			open = function() {
-				var setTransition = function() { 
-					if( support.transitions ) {
-						classie.addClass( self.el, 'photostack-transition' ); 
-					}
-				}
-				if( beforeStep ) {
-					this.removeEventListener( 'click', open ); 
-					classie.removeClass( self.el, 'photostack-start' );
-					setTransition();
-				}
-				else {
-					self.openDefault = true;
-					setTimeout( setTransition, 25 );
-				}
-				self.started = true; 
-				self._showPhoto( self.current );
-			};
+			beforeStep = classie.hasClass( this.el, 'photostack-start' );
 
 		if( beforeStep ) {
 			this._shuffle();
-			this.el.addEventListener( 'click', open );
+			this.el.addEventListener( 'click', function() {
+				self._open(beforeStep);
+			});
 		}
 		else {
-			open();
+			this._open(beforeStep);
 		}
 
 		if(this.options.showNavigation) {
