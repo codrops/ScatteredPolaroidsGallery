@@ -118,6 +118,9 @@
 	Photostack.prototype.options = {
 		current: 0,
 		showNavigation: true,
+		afterInit: null,
+		afterShowPhoto: null,
+		afterNavigate: null,
 	};
 
 	Photostack.prototype._init = function() {
@@ -127,6 +130,9 @@
 		}
 		this._getSizes();
 		this._initEvents();
+		if(this.options.afterInit) {
+			this.options.afterInit(this);
+		}
 	}
 
 	Photostack.prototype._addNavigation = function() {
