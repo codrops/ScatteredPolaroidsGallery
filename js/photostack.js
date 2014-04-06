@@ -92,14 +92,20 @@
 		if( !this.allItemsCount ) return;
 		this.items = [].slice.call( this.inner.querySelectorAll( 'figure:not([data-dummy])' ) );
 		this.itemsCount = this.items.length;
-		// index of the current photo
-		this.current = 0;
 		this.options = extend( {}, this.options );
-  		extend( this.options, options );
-  		this._init();
+  	extend( this.options, options );
+ 		// index of the current photo
+ 		if(options.start) {
+			this.current = options.start;
+		}
+  	this._init();
+
 	}
 
-	Photostack.prototype.options = {};
+	Photostack.prototype.options = {
+		current: 0,
+		showNavigation: true,
+	};
 
 	Photostack.prototype._init = function() {
 		this.currentItem = this.items[ this.current ];
