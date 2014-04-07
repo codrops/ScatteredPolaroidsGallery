@@ -95,9 +95,7 @@
 		this.options = extend( {}, this.options );
   	extend( this.options, options );
  		// index of the current photo
- 		if(options.start) {
-			this.current = options.start;
-		}
+		this.current = options.start;
   	this._init();
 		var ps = this;
 
@@ -116,7 +114,7 @@
 	}
 
 	Photostack.prototype.options = {
-		current: 0,
+		start: 0,
 		showNavigation: true,
 		afterInit: null,
 		afterShowPhoto: null,
