@@ -95,7 +95,7 @@
 		this.options = extend( {}, this.options );
   	extend( this.options, options );
  		// index of the current photo
-		this.current = options.start;
+		this.current = this.options.start;
   	this._init();
 		var ps = this;
 
