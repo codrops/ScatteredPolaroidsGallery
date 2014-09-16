@@ -78,6 +78,7 @@
 	text-align: left;
 	font-size: 22px;
 	line-height: 1.25;
+	z-index: 1;
 }
 
 .photostack-back p {
