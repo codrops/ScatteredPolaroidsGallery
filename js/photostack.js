@@ -170,7 +170,8 @@
 		if(this.options.clickToFlip == 'true')
 		{
 			this.items.forEach(function(img, idx){
-				img.addEventListener('click', function(){
+				img.addEventListener('click', function(event){
+					event.preventDefault();
 					if( idx === self.current ) {
 						self._rotateItem();
 					}
