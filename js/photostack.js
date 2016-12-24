@@ -167,6 +167,18 @@
 	};
 
 	Photostack.prototype._initEvents = function() {
+		if(this.options.clickToFlip == 'true')
+		{
+			this.items.forEach(function(img, idx){
+				img.addEventListener('click', function(event){
+					event.preventDefault();
+					if( idx === self.current ) {
+						self._rotateItem();
+					}
+				})
+			});
+		}
+		
 		var self = this,
 			beforeStep = classie.hasClass( this.el, 'photostack-start' );
 
